@@ -65,7 +65,7 @@ enum class JumpMode {
    *
    * On both default jump and shift jump, the caret will never move from its original position.
    */
-  CHUNK {
+  CHUCK {
     override val canJump = false
   },
   
@@ -107,7 +107,7 @@ enum class JumpMode {
     JUMP        -> AceConfig.jumpModeColor
     JUMP_END    -> AceConfig.jumpEndModeColor
     JUMP_START  -> AceConfig.jumpModeColor
-    CHUNK       -> AceConfig.jumpModeColor
+    CHUCK       -> AceConfig.jumpModeColor
     TARGET      -> AceConfig.targetModeColor
     DECLARATION -> AceConfig.definitionModeColor
   }
@@ -117,7 +117,7 @@ enum class JumpMode {
     JUMP        -> "Jump"
     JUMP_END    -> "Jump to End"
     JUMP_START  -> "Jump to Start"
-    CHUNK       -> "Delete Word"
+    CHUCK       -> "Delete Word"
     TARGET      -> "Target"
     DECLARATION -> "Definition"
   }

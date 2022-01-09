@@ -29,7 +29,7 @@ internal class TagJumper(private val mode: JumpMode, private val searchProcessor
     val editor = tag.editor
     val offset = tag.offset
     
-    if (mode === JUMP_END || mode === TARGET || mode === JUMP_START || mode === CHUNK) {
+    if (mode === JUMP_END || mode === TARGET || mode === JUMP_START || mode === CHUCK) {
       val chars = editor.immutableText
       val matchingChars = searchProcessor?.let { chars.countMatchingCharacters(offset, it.query.rawText) } ?: 0
       val targetOffset = offset + matchingChars

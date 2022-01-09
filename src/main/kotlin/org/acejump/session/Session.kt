@@ -137,7 +137,7 @@ class Session(private val mainEditor: Editor, private val jumpEditors: List<Edit
         val finalEditor: Editor = result.tag.editor
         tagCanvases.values.forEach(TagCanvas::removeMarkers)
         end(result)
-        if (jumpMode === JumpMode.CHUNK) {
+        if (jumpMode === JumpMode.CHUCK) {
 
           PsiDocumentManager.getInstance(finalEditor.project!!)
             .commitDocument(finalEditor.document)

@@ -101,9 +101,9 @@
       <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl shift alt SEMICOLON"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt SEMICOLON"/>
     </action>
-    <action id="ToggleChunkMode"
-            class="org.acejump.action.AceAction$ToggleChunkMode"
-            text="ToggleChunkMode">
+    <action id="ToggleChuckMode"
+            class="org.acejump.action.AceAction$ToggleChuckMode"
+            text="ToggleChuckMode">
       <keyboard-shortcut keymap="Mac OS X" first-keystroke="shift ctrl alt PERIOD"/>
       <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl alt PERIOD"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt PERIOD"/>

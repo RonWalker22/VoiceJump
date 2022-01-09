@@ -134,19 +134,19 @@ class AceTest : BaseTest() {
     myFixture.checkResult("test target<caret> action")
   }
 
-   fun `ignore test chunk mode against letter`() {
+   fun `ignore test chuck mode against letter`() {
     "test <caret>target action".search("g")
 
-    takeAction(AceAction.ToggleChunkMode())
+    takeAction(AceAction.ToggleChuckMode())
     typeAndWaitForResults(session.tags[0].key)
 
     myFixture.checkResult("test <caret>action")
   }
 
-  fun `ignore test chunk mode against word`() {
+  fun `ignore test chuck mode against word`() {
     "test <caret>target action".search("target")
 
-    takeAction(AceAction.ToggleChunkMode())
+    takeAction(AceAction.ToggleChuckMode())
     typeAndWaitForResults(session.tags[0].key)
 
     myFixture.checkResult("test <caret>action")
