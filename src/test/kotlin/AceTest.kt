@@ -25,25 +25,25 @@ class AceTest : BaseTest() {
     assertEquals("abcd dabc cdab".search("cd"), setOf(2, 10))
 
   fun `test a query containing a space character`() =
-    assertEquals("abcd dabc cdab".search("cd "), setOf(2))
+    assertEquals("abcd dabc cd cdab".search("cd "), setOf(2, 10))
 
   fun `test a query containing a { character`() =
-    assertEquals("abcd{dabc cdab".search("cd{"), setOf(2))
+    assertEquals("abcd{dabc cd{ cdab".search("cd{"), setOf(2, 10))
 
   fun `test that jumping to first occurrence succeeds`() {
-    "<caret>testing 1234".search("1")
+    "<caret>testing 1234 testing 123".search("1")
 
     takeAction(ACTION_EDITOR_ENTER)
 
-    myFixture.checkResult("testing <caret>1234")
+    myFixture.checkResult("testing <caret>1234 testing 123")
   }
 
   fun `test that jumping to second occurrence succeeds`() {
-    "<caret>testing 1234".search("ti")
+    "<caret>testing 1234 testing".search("ti")
 
     takeAction(ACTION_EDITOR_ENTER)
 
-    myFixture.checkResult("tes<caret>ting 1234")
+    myFixture.checkResult("tes<caret>ting 1234 testing")
   }
 
   fun `test that jumping to previous occurrence succeeds`() {
@@ -55,19 +55,29 @@ class AceTest : BaseTest() {
   }
 
   fun `test tag selection`() {
-    "<caret>testing 1234".search("g")
+    "<caret>testing 1234 testing".search("g")
 
     typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("testin<caret>g 1234 testing")
+  }
+
+
+  /**
+   * Automatically select a target when there is only one potential target remaining.
+   */
+  fun `test short-circuiting tags`() {
+    "<caret>testing 1234".search("g")
 
     myFixture.checkResult("testin<caret>g 1234")
   }
 
   fun `test shift selection`() {
-    "<caret>testing 1234".search("4")
+    "<caret>testing 1234 gg 45".search("4")
 
     typeAndWaitForResults(session.tags[0].key.uppercase())
 
-    myFixture.checkResult("<selection>testing 123<caret></selection>4")
+    myFixture.checkResult("<selection>testing 123<caret></selection>4 gg 45")
   }
 
   fun `test words before caret action`() {
@@ -99,70 +109,70 @@ class AceTest : BaseTest() {
   }
 
   fun `test target mode`() {
-    "<caret>test target action".search("target")
+    "<caret>test target action target".search("target")
 
     takeAction(AceAction.ToggleTargetMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test <selection>target<caret></selection> action")
+    myFixture.checkResult("test <selection>target<caret></selection> action target")
   }
 
   fun `test jump start mode against word`() {
-    "<caret>test target action".search("target")
+    "<caret>test target action target".search("target")
 
     takeAction(AceAction.ToggleJumpStartMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test <caret>target action")
+    myFixture.checkResult("test <caret>target action target")
   }
 
   fun `test jump start mode against letter`() {
-    "<caret>test target action".search("i")
+    "<caret>test target action action".search("i")
 
     takeAction(AceAction.ToggleJumpStartMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test target <caret>action")
+    myFixture.checkResult("test target <caret>action action")
   }
 
   fun `test jump end mode against word`() {
-    "<caret>test target action".search("target")
+    "<caret>test target action target".search("target")
 
     takeAction(AceAction.ToggleJumpEndMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test target<caret> action")
+    myFixture.checkResult("test target<caret> action target")
   }
 
    fun `ignore test chuck mode against letter`() {
-    "test <caret>target action".search("g")
+    "test <caret>target action action".search("g")
 
     takeAction(AceAction.ToggleChuckMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test <caret>action")
+    myFixture.checkResult("test <caret>action action")
   }
 
   fun `ignore test chuck mode against word`() {
-    "test <caret>target action".search("target")
+    "test <caret>target action target".search("target")
 
     takeAction(AceAction.ToggleChuckMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test <caret>action")
+    myFixture.checkResult("test <caret>action target")
   }
 
   fun `test jump end mode against letter`() {
-    ("<caret>test target action").search("g")
+    ("<caret>test target action target").search("g")
 
     takeAction(AceAction.ToggleJumpEndMode())
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test target<caret> action")
+    myFixture.checkResult("test target<caret> action target")
   }
 
   fun `test cache invalidation`() {
-    "first line".search("first")
+    "first line first".search("first")
     typeAndWaitForResults(session.tags[0].key)
 
     repeat(3) { takeAction(EnterAction()) }
@@ -171,7 +181,7 @@ class AceTest : BaseTest() {
     typeAndWaitForResults("first")
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("\n\n\n<selection>first<caret></selection> line")
+    myFixture.checkResult("\n\n\n<selection>first<caret></selection> line first")
   }
 
   fun `test line mode`() {
@@ -185,25 +195,25 @@ class AceTest : BaseTest() {
   fun `test chinese selection`() {
     AceConfig.settings.mapToASCII = true
 
-    "test 拼音 selection".search("py")
+    "test 拼音 selection 拼音".search("py")
 
     takeAction(AceAction.ToggleTargetMode())
 
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("test <selection>拼音<caret></selection> selection")
+    myFixture.checkResult("test <selection>拼音<caret></selection> selection 拼音")
   }
 
   fun `test japanese selection`() {
     AceConfig.settings.mapToASCII = true
 
-    "あみだにょらい".search("am")
+    "あみだにょらい あみだにょらい".search("am")
 
     takeAction(AceAction.ToggleTargetMode())
 
     typeAndWaitForResults(session.tags[0].key)
 
-    myFixture.checkResult("<selection>あみだにょらい<caret></selection>")
+    myFixture.checkResult("<selection>あみだにょらい<caret></selection> あみだにょらい")
   }
 
   // https://github.com/acejump/AceJump/issues/355

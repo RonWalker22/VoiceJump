@@ -66,8 +66,13 @@ internal class Tagger(private val editors: List<Editor>) {
       }
     }
 
-    if (!isRegex || tagMap.isEmpty())
+    if (!isRegex || tagMap.isEmpty()) {
       tagMap = assignTagsAndMerge(results, availableTags, query, queryText)
+      if (tagMap.size == 1) {
+        val selectedTag = tagMap.entries.first()
+        return TaggingResult.Jump(query = queryText.substringBefore(selectedTag.key), mark = selectedTag.key, tag = selectedTag.value)
+      }
+    }
 
     val resultTags = results.flatMap { (editor, offsets) -> offsets.map { Tag(editor, it) } }
     return TaggingResult.Mark(createTagMarkers(resultTags, query.rawText.ifEmpty { null }))

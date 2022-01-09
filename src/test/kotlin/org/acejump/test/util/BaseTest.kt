@@ -58,8 +58,13 @@ abstract class BaseTest: FileEditorManagerTestCase() {
     return myFixture.editor.markupModel.allHighlighters.map { it.startOffset }.toSet()
   }
 
-  private fun String.assertCorrectNumberOfTags(query: String) =
-    assertEquals(split(query.fold("") { prefix, char ->
+  private fun String.assertCorrectNumberOfTags(query: String) {
+    var numberOfTags = split(query.fold("") { prefix, char ->
       if ((prefix + char) in this) prefix + char else return
-    }).size - 1, myFixture.editor.markupModel.allHighlighters.size)
+    }).size - 1
+
+    if (numberOfTags == 1) numberOfTags--
+    assertEquals(numberOfTags, myFixture.editor.markupModel.allHighlighters.size)
+  }
+
 }
