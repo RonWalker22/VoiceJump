@@ -1,10 +1,13 @@
 package org.acejump.session
 
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.ScrollType
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler
 import com.intellij.openapi.editor.colors.EditorColors.CARET_COLOR
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
 import com.intellij.util.containers.ContainerUtil
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.acejump.*
@@ -127,18 +130,34 @@ class Session(private val mainEditor: Editor, private val jumpEditors: List<Edit
 
     when (val result = tagger.markOrJump(query, results.clone())) {
       is TaggingResult.Jump -> {
-        tagJumper.jump(result.tag, shiftMode, isCrossEditor = mainEditor !== result.tag.editor)
+        if (jumpMode.canJump) {
+          tagJumper.jump(result.tag, shiftMode, isCrossEditor = mainEditor !== result.tag.editor)
+        }
+        val finalOffset: Int = result.tag.offset
+        val finalEditor: Editor = result.tag.editor
         tagCanvases.values.forEach(TagCanvas::removeMarkers)
         end(result)
+        if (jumpMode === JumpMode.CHUNK) {
+
+          PsiDocumentManager.getInstance(finalEditor.project!!)
+            .commitDocument(finalEditor.document)
+
+          val psiFile = PsiDocumentManager.getInstance(finalEditor.project!!)
+            .getPsiFile(finalEditor.document)
+          WriteCommandAction.runWriteCommandAction(finalEditor.project) {
+            val newElement: PsiElement? = psiFile?.findElementAt(finalOffset)
+            newElement?.delete()
+          }
+        }
       }
 
       is TaggingResult.Mark -> {
         val markers = result.markers
-        
+
         for ((editor, canvas) in tagCanvases) {
           canvas.setMarkers(markers[editor].orEmpty())
         }
-        
+
         if (jumpEditors.all { editor ->
             val cache = EditorOffsetCache.new()
             markers[editor].let { it == null || it.none { marker ->
@@ -156,12 +175,12 @@ class Session(private val mainEditor: Editor, private val jumpEditors: List<Edit
     val jumpEditor = jumpEditors.singleOrNull() ?: return
     markResults(mapOf(jumpEditor to resultsToMark))
   }
-  
+
   @ExternalUsage
   fun markResults(resultsToMark: Map<Editor, Collection<Int>>) {
     tagger = Tagger(jumpEditors)
     tagCanvases.values.forEach { it.setMarkers(emptyList()) }
-  
+
     val processor = SearchProcessor.fromRegex(jumpEditors, "", defaultBoundaries)
       .apply {
         results.clear()
@@ -171,7 +190,7 @@ class Session(private val mainEditor: Editor, private val jumpEditors: List<Edit
           }
         }
       }
-  
+
     updateSearch(processor, markImmediately = true)
   }
 

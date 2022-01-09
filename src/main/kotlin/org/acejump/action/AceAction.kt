@@ -75,6 +75,8 @@ sealed class AceAction: DumbAwareAction() {
 
   class ToggleJumpMode        : BaseToggleJumpModeAction(JUMP)
   class ToggleJumpEndMode     : BaseToggleJumpModeAction(JUMP_END)
+  class ToggleJumpStartMode   : BaseToggleJumpModeAction(JUMP_START)
+  class ToggleChunkMode       : BaseToggleJumpModeAction(CHUNK)
   class ToggleTargetMode      : BaseToggleJumpModeAction(TARGET)
   class ToggleDeclarationMode : BaseToggleJumpModeAction(DECLARATION)
 

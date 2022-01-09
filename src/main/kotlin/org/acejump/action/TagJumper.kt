@@ -29,20 +29,23 @@ internal class TagJumper(private val mode: JumpMode, private val searchProcessor
     val editor = tag.editor
     val offset = tag.offset
     
-    if (mode === JUMP_END || mode === TARGET) {
+    if (mode === JUMP_END || mode === TARGET || mode === JUMP_START || mode === CHUNK) {
       val chars = editor.immutableText
       val matchingChars = searchProcessor?.let { chars.countMatchingCharacters(offset, it.query.rawText) } ?: 0
       val targetOffset = offset + matchingChars
       val isInsideWord = matchingChars > 0 && chars[targetOffset - 1].isWordPart && chars[targetOffset].isWordPart
-      val finalTargetOffset = if (isInsideWord) chars.wordEnd(targetOffset) + 1 else targetOffset
+      val finalTargetOffsetAtEnd = if (isInsideWord) chars.wordEnd(targetOffset) + 1 else targetOffset
+      val finalTargetOffsetAtStart = chars.wordStart(targetOffset)
 
       if (mode === JUMP_END) {
-        moveCaretTo(editor, finalTargetOffset)
+        moveCaretTo(editor, finalTargetOffsetAtEnd)
+      } else if (mode === JUMP_START) {
+        moveCaretTo(editor, finalTargetOffsetAtStart)
       } else if (mode === TARGET) {
         if (isInsideWord) {
-          selectRange(editor, chars.wordStart(targetOffset), finalTargetOffset)
+          selectRange(editor, chars.wordStart(targetOffset), finalTargetOffsetAtEnd)
         } else {
-          selectRange(editor, offset, finalTargetOffset)
+          selectRange(editor, offset, finalTargetOffsetAtEnd)
         }
       }
     } else {

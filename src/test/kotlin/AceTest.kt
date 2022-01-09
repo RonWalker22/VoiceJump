@@ -107,6 +107,60 @@ class AceTest : BaseTest() {
     myFixture.checkResult("test <selection>target<caret></selection> action")
   }
 
+  fun `test jump start mode against word`() {
+    "<caret>test target action".search("target")
+
+    takeAction(AceAction.ToggleJumpStartMode())
+    typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("test <caret>target action")
+  }
+
+  fun `test jump start mode against letter`() {
+    "<caret>test target action".search("i")
+
+    takeAction(AceAction.ToggleJumpStartMode())
+    typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("test target <caret>action")
+  }
+
+  fun `test jump end mode against word`() {
+    "<caret>test target action".search("target")
+
+    takeAction(AceAction.ToggleJumpEndMode())
+    typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("test target<caret> action")
+  }
+
+   fun `ignore test chunk mode against letter`() {
+    "test <caret>target action".search("g")
+
+    takeAction(AceAction.ToggleChunkMode())
+    typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("test <caret>action")
+  }
+
+  fun `ignore test chunk mode against word`() {
+    "test <caret>target action".search("target")
+
+    takeAction(AceAction.ToggleChunkMode())
+    typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("test <caret>action")
+  }
+
+  fun `test jump end mode against letter`() {
+    ("<caret>test target action").search("g")
+
+    takeAction(AceAction.ToggleJumpEndMode())
+    typeAndWaitForResults(session.tags[0].key)
+
+    myFixture.checkResult("test target<caret> action")
+  }
+
   fun `test cache invalidation`() {
     "first line".search("first")
     typeAndWaitForResults(session.tags[0].key)

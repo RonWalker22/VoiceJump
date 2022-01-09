@@ -1,17 +1,17 @@
-<idea-plugin url="https://github.com/acejump/AceJump">
-  <name>AceJump</name>
-  <id>AceJump</id>
+<idea-plugin url="https://github.com/RonWalker22/VoiceJump">
+  <name>VoiceJump</name>
+  <id>VoiceJump</id>
 
   <description><![CDATA[
-    AceJump allows you to quickly navigate the caret to any position visible in the editor.
-    See a demo of <a href="https://www.youtube.com/watch?v=8cgy8ITtsJE">AceJump in action</a>!
-    Simply hit "ctrl+;", type a character, then type the matching character to Ace Jump. ]]>
+    Manipulate code with your voice. A poor man's <a href="https://github.com/pokey/cursorless-vscode">Cursorless</a>.
+    Based off of <a href="https://github.com/acejump/AceJump">AceJump</a>.
+    ]]>
   </description>
 
   <depends>com.intellij.modules.platform</depends>
 
   <category>Navigation</category>
-  <vendor url="https://github.com/acejump/AceJump">AceJump</vendor>
+  <vendor url="https://github.com/RonWalker22/VoiceJump">RonWalker22</vendor>
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationService serviceImplementation="org.acejump.config.AceConfig"/>
@@ -96,5 +96,17 @@
     <action id="AceWordBackwardsAction"
             class="org.acejump.action.AceAction$StartAllWordsBackwardsMode"
             text="Start AceJump in All Words Before Caret Mode"/>
+    <action id="AceJumpStartMode" class="org.acejump.action.AceAction$ToggleJumpStartMode" text="Ace Jump Start Mode">
+      <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl shift alt SEMICOLON"/>
+      <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl shift alt SEMICOLON"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt SEMICOLON"/>
+    </action>
+    <action id="ToggleChunkMode"
+            class="org.acejump.action.AceAction$ToggleChunkMode"
+            text="ToggleChunkMode">
+      <keyboard-shortcut keymap="Mac OS X" first-keystroke="shift ctrl alt PERIOD"/>
+      <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="shift ctrl alt PERIOD"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt PERIOD"/>
+    </action>
   </actions>
 </idea-plugin>

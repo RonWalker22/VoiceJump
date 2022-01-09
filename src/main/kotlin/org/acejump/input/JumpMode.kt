@@ -16,14 +16,18 @@ enum class JumpMode {
    * assigned a proper [JumpMode] by the time the user requests a jump, the
    * results of the jump are undefined.
    */
-  DISABLED,
+  DISABLED {
+    override val canJump = true
+   },
   
   /**
    * On default jump, places the caret at the first character of the search
    * query. On shift jump, does the above but also selects all text between
    * the original and new caret positions.
    */
-  JUMP,
+  JUMP {
+    override val canJump = true
+  },
   
   /**
    * On default jump, places the caret at the end of a word. Word detection
@@ -35,7 +39,35 @@ enum class JumpMode {
    * On shift jump, does the above but also selects all text between
    * the original and new caret positions.
    */
-  JUMP_END,
+  JUMP_END {
+    override val canJump = true
+  },
+
+  /**
+   * On default jump, places the caret at the start of a word. Word detection
+   * uses [Character.isJavaIdentifierPart] to count some special characters,
+   * such as underscores, as part of a word. If there is no word at the first
+   * character of the search query, then the caret is placed after the last
+   * character of the search query.
+   *
+   */
+  JUMP_START {
+    override val canJump = true
+  },
+
+
+  /**
+   * On default jump, deletes word. Word detection
+   * uses [Character.isJavaIdentifierPart] to count some special characters,
+   * such as underscores, as part of a word. If there is no word at the first
+   * character of the search query, then the caret is placed after the last
+   * character of the search query.
+   *
+   * On both default jump and shift jump, the caret will never move from its original position.
+   */
+  CHUNK {
+    override val canJump = false
+  },
   
   /**
    * On default jump, places the caret at the end of a word, and also selects
@@ -48,7 +80,9 @@ enum class JumpMode {
    * On shift jump, does the above but also selects all text between the
    * start of the original caret position and the end of the new selection.
    */
-  TARGET,
+  TARGET {
+    override val canJump = true
+  },
   
   /**
    * On default jump, performs the Go To Declaration action, available
@@ -59,20 +93,31 @@ enum class JumpMode {
    *
    * Always places the caret at the first character of the search query.
    */
-  DECLARATION;
-  
+  DECLARATION {
+    override val canJump = true
+  };
+
+  /**
+   * Decides if the caret can move from its original position during a "jump".
+   */
+  abstract val canJump: Boolean
+
   val caretColor: Color get() = when (this) {
     DISABLED    -> AbstractColorsScheme.INHERITED_COLOR_MARKER
     JUMP        -> AceConfig.jumpModeColor
     JUMP_END    -> AceConfig.jumpEndModeColor
+    JUMP_START  -> AceConfig.jumpModeColor
+    CHUNK       -> AceConfig.jumpModeColor
     TARGET      -> AceConfig.targetModeColor
     DECLARATION -> AceConfig.definitionModeColor
   }
-  
+
   override fun toString() = when (this) {
     DISABLED    -> "(Skip)"
     JUMP        -> "Jump"
     JUMP_END    -> "Jump to End"
+    JUMP_START  -> "Jump to Start"
+    CHUNK       -> "Delete Word"
     TARGET      -> "Target"
     DECLARATION -> "Definition"
   }
