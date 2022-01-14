@@ -1,5 +1,5 @@
-import org.acejump.action.AceAction
-import org.acejump.test.util.BaseTest
+import org.voicejump.action.AceAction
+import org.voicejump.test.util.BaseTest
 import org.junit.Ignore
 import java.io.File
 import kotlin.random.Random

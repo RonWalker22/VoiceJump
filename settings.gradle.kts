@@ -1,1 +1,1 @@
-rootProject.name = "acejump"
+rootProject.name = "voicejump"

@@ -17,7 +17,7 @@ tasks {
 
   named<Zip>("buildPlugin") {
     dependsOn("test")
-    archiveFileName.set("AceJump.zip")
+    archiveFileName.set("VoiceJump.zip")
   }
 
   withType<RunIdeTask> {
@@ -54,8 +54,8 @@ tasks {
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(15))
 
 changelog {
-  version.set("3.8.5")
-  path.set("${project.projectDir}/CHANGES.md")
+  version.set("0.0.1")
+  path.set("${project.projectDir}/docs/CHANGES.md")
   header.set(provider { "[${project.version}] - ${date()}" })
   itemPrefix.set("-")
   unreleasedTerm.set("Unreleased")
@@ -75,10 +75,10 @@ dependencies {
 
 intellij {
   version.set("2021.3")
-  pluginName.set("AceJump")
+  pluginName.set("VoiceJump")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
 }
 
-group = "org.acejump"
-version = "3.8.5"
+group = "org.voicejump"
+version = "0.0.1"

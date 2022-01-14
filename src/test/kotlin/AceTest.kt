@@ -1,9 +1,9 @@
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_ENTER
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_START_NEW_LINE
 import com.intellij.openapi.editor.actions.EnterAction
-import org.acejump.action.AceAction
-import org.acejump.config.AceConfig
-import org.acejump.test.util.BaseTest
+import org.voicejump.action.AceAction
+import org.voicejump.config.AceConfig
+import org.voicejump.test.util.BaseTest
 
 /**
  * Functional test cases and end-to-end performance tests.
@@ -80,34 +80,6 @@ class AceTest : BaseTest() {
     myFixture.checkResult("<selection>testing 123<caret></selection>4 gg 45")
   }
 
-  fun `test words before caret action`() {
-    makeEditor("test words <caret> before caret is two")
-
-    takeAction(AceAction.StartAllWordsBackwardsMode())
-
-    assertEquals(2, session.tags.size)
-  }
-
-  fun `test words after caret action`() {
-    makeEditor("test words <caret> after caret is four")
-
-    takeAction(AceAction.StartAllWordsForwardMode())
-
-    assertEquals(4, session.tags.size)
-  }
-
-  fun `test word mode`() {
-    makeEditor("test word action")
-
-    takeAction(AceAction.StartAllWordsMode())
-
-    assertEquals(3, session.tags.size)
-
-    typeAndWaitForResults(session.tags[1].key)
-
-    myFixture.checkResult("test <caret>word action")
-  }
-
   fun `test target mode`() {
     "<caret>test target action target".search("target")
 
@@ -182,14 +154,6 @@ class AceTest : BaseTest() {
     typeAndWaitForResults(session.tags[0].key)
 
     myFixture.checkResult("\n\n\n<selection>first<caret></selection> line first")
-  }
-
-  fun `test line mode`() {
-    makeEditor("    test\n    three\n    lines")
-
-    takeAction(AceAction.StartAllLineMarksMode())
-
-    assertEquals(9, session.tags.size)
   }
 
   fun `test chinese selection`() {
