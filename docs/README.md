@@ -81,7 +81,7 @@ exceptions) and forcing the search query to begin at the start of a word/identif
 More actions coming...
 
 
-## Action Feedback
+## Visual Action Feedback
 
 * cursor changes color and shape(block)
   * during targeting & misfire
