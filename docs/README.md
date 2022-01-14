@@ -14,17 +14,13 @@ See [more actions](#more-actions) for full list of actions.
 
 ### Example
 
-* your editor before actions: `"<caret>run rain raw happy"`
-  * "\<caret>" refers to the position of your cursor.
-    ![ace action starting state](/docs/images/ace-action-targeting-state-1.png)
+* your editor before actions: ![ace action starting state](/docs/images/ace-action-targeting-state-1.png)
 * spoken action: `post red`
   * targeting step 1; a VoiceJump Action
-* potential targets: `['run', 'rain', 'raw']` // tags appears in your editor
-  ![ace action starting state](/docs/images/ace-action-targeting-state-2.png)
+* potential targets: ![ace action starting state](/docs/images/ace-action-targeting-state-2.png)
 * spoken action(Talon Action): `crunch` // trigger a tag
   * targeting step 2; a Talon Action
-* your editor after actions: `"run rain raw<caret> happy"`
-  ![ace action end state](/docs/images/ace-action-targeting-state-3.png)
+* your editor after actions: ![ace action end state](/docs/images/ace-action-targeting-state-3.png)
 
 
 ## More On Targeting
