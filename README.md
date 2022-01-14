@@ -1,8 +1,8 @@
 # VoiceJump
 
 VoiceJump is a plugin for the [IntelliJ Platform](https://github.com/JetBrains/intellij-community/) that leverages [Talon](https://talonvoice.com/)
-to allow you to manipulate code with your voice. This project is a fork of [AceJump](https://github.com/acejump/AceJump) and is  
-inspired by [Cursorless](https://github.com/pokey/cursorless-vscode).
+to allow you to manipulate code with your voice. This project is a fork of [AceJump](https://github.com/acejump/AceJump) and is inspired 
+by [Cursorless](https://github.com/pokey/cursorless-vscode).
 
 - [Getting Started Guide](docs/README.md)
 
