@@ -18,7 +18,6 @@
     <applicationConfigurable groupId="tools" displayName="VoiceJump"
                              instance="org.voicejump.config.AceConfigurable"
                              id="preferences.AceConfigurable" dynamic="true"/>
-    <applicationService serviceImplementation="org.voicejump.server.ServerService"/>
     <editorActionHandler action="EditorEscape" order="first"
                          implementationClass="org.voicejump.action.AceEditorAction$Reset"/>
     <editorActionHandler action="EditorBackSpace" order="first"
@@ -37,7 +36,11 @@
   <actions>
     <action id="AceAction"
             class="org.voicejump.action.AceAction$ActivateOrCycleMode"
-            text="Activate / Cycle VoiceJump Mode"/>
+            text="Activate / Cycle VoiceJump Mode">
+      <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl SEMICOLON"/>
+      <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl SEMICOLON"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl SEMICOLON"/>
+    </action>
     <action id="AceReverseAction"
             class="org.voicejump.action.AceAction$ActivateOrReverseCycleMode"
             text="Activate / Reverse Cycle VoiceJump Mode"/>
@@ -58,9 +61,4 @@
             class="org.voicejump.action.AceAction$ToggleChuckMode"
             text="ToggleChuckMode"/>
   </actions>
-
-  <applicationListeners>
-    <listener class="org.voicejump.server.ApplicationListener"
-              topic="com.intellij.ide.AppLifecycleListener"/>
-  </applicationListeners>
 </idea-plugin>
